@@ -7,20 +7,30 @@ public class Graph {
     static Scanner file = new Scanner(System.in);
     public static void main(String[] args){
         
-        System.out.println("-- Generate Graph --"); 
+        System.out.println("-- Generate Graph --\n"); 
         printGraph(generateGraph(4));
 
-        System.out.println("\n-- Read Graph --");
+        System.out.println("\n\n-- Read Graph --\n");
         readGraph();
 
-        System.out.println("\n-- Is connect --");
-        int[][] graph = {{0,2,0,0,0,0},
-                         {0,0,5,0,0,0},
-                         {0,0,0,7,0,0},
-                         {0,0,0,0,1,0},
-                         {0,0,0,0,0,6},
-                         {0,0,0,0,0,0}};
-        isConnect2(graph);
+        System.out.println("\n\n-- Is connect --");
+        int[][] graphConnect = {{0,2,0,0,0,0},
+                                {0,0,5,0,0,0},
+                                {0,0,0,7,2,0},
+                                {0,0,0,0,0,0},
+                                {0,0,0,0,0,6},
+                                {0,0,0,0,0,0}};
+        System.out.println("Graph connect : ");
+        System.out.println(isConnect(graphConnect));
+
+        int[][] graphNonConnect = {{0,2,3,0,0,0},
+                                   {0,0,5,3,0,0},
+                                   {0,0,0,7,0,0},
+                                   {0,0,0,0,0,0},
+                                   {0,0,0,0,0,6},
+                                   {0,0,0,0,0,0}};
+        System.out.println("\nGraph non connect : ");
+        System.out.println(isConnect(graphNonConnect));
     }
 
     //Question 1
@@ -28,6 +38,7 @@ public class Graph {
         int numLigne = 0;
         String ligne[] = file.nextLine().split(",");
         int graph [][] = new int[ligne.length][ligne.length];
+
         while(file.hasNextLine()){
             for(int numColonne = 0;numColonne < ligne.length;numColonne++){
                 graph[numLigne][numColonne] = Integer.parseInt(ligne[numColonne]);
@@ -35,6 +46,7 @@ public class Graph {
             numLigne++;
             ligne = file.nextLine().split(",");
         }
+
         printGraph(graph);
     }
 
@@ -62,49 +74,40 @@ public class Graph {
 
     //Question 2
     public static boolean isConnect(int[][] graph){
-        ArrayList<Integer> boite = new ArrayList<Integer>();
-        System.out.println("ESSAI");
-        printGraph(graph);
-        for(int u = 0;u<3;u++){
-            for(int i=0; i<graph.length; i++){
-                for(int j=0; j<graph.length;j++){
-                    if(graph[i][j] != 0){
-                        if(boite.isEmpty()){
-                            boite.add(i);
-                        }else if(boite.contains(j) && !boite.contains(i)){
-                            System.out.println("ANALYSE DE "+graph[i][j]);
-                            System.out.println("AH ! "+i);
-                            boite.add(i);
-                        }
-    
-                    }
-    
-                }
-            }
-
-        }
-
-        System.out.println(boite);
-        return false;
-    }
-
-    public static boolean isConnect2(int[][] graph){
-        printGraph(graph);
-
         Set<Integer> box = new HashSet<Integer>();
-        boolean firstOperation = false;
-        // for(int i=0; i<)
-        
+        printGraph(graph);
 
+        for(int i=0; i<graph.length; i++){
+            for(int j=0; j<graph.length; j++){
+                if(graph[i][j] != 0){
+                    if(box.isEmpty()){
+                        box.add(i);
+                        box.add(j);
+                    }else{
+                        if(box.contains(i) || box.contains(j)){
+                            box.add(i);
+                            box.add(j);
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        if(box.size() == graph.length){
+            return true;
+        }
         return false;
     }
 
 
 
     //Question 3
-    public static int[][] dijkstra(){
-
-        return null;
+    public static int[][] dijkstra(int[][] graph){
+        int[][] distance = new int[graph.length][graph.length];
+        
+        return distance;
     }
 
 }
