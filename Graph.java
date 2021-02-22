@@ -1,6 +1,6 @@
 import java.lang.Math;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Scanner;
 
 public class Graph {
@@ -9,15 +9,18 @@ public class Graph {
         
         System.out.println("-- Generate Graph --"); 
         printGraph(generateGraph(4));
-        System.out.println("\n -- Read Graph --");
-        // readGraph();
-        // int[][] graph = {{0,0,0,82,0,0},
-        //                 {0,0,59,87,0,0},
-        //                 {0,59,0,57,0,0},
-        //                 {82,87,0,0,0,0},
-        //                 {0,0,0,0,0,68},
-        //                 {0,0,0,0,68,0}};
-        // isConnect(graph);
+
+        System.out.println("\n-- Read Graph --");
+        readGraph();
+
+        System.out.println("\n-- Is connect --");
+        int[][] graph = {{0,2,0,0,0,0},
+                         {0,0,5,0,0,0},
+                         {0,0,0,7,0,0},
+                         {0,0,0,0,1,0},
+                         {0,0,0,0,0,6},
+                         {0,0,0,0,0,0}};
+        isConnect2(graph);
     }
 
     //Question 1
@@ -34,15 +37,14 @@ public class Graph {
         }
         printGraph(graph);
     }
+
     public static int[][] generateGraph(int size) {
         int[][] graph = new int[size][size];
 
         for(int i=0; i<size; i++){
-            for(int j=0; j<size; j++){
+            for(int j=size-1; j>i; j--){
                 int value = (int) (Math.random()*9);
-                if(j<size && value != 0 && i < j){
-                    graph[i][j] = value;
-                }
+                graph[i][j] = value;
             }    
         }
 
@@ -85,6 +87,19 @@ public class Graph {
         System.out.println(boite);
         return false;
     }
+
+    public static boolean isConnect2(int[][] graph){
+        printGraph(graph);
+
+        Set<Integer> box = new HashSet<Integer>();
+        boolean firstOperation = false;
+        // for(int i=0; i<)
+        
+
+        return false;
+    }
+
+
 
     //Question 3
     public static int[][] dijkstra(){
