@@ -7,13 +7,13 @@ import java.util.*;
 public class Graph {
     public static void main(String[] args) throws IOException{
         System.out.println("Graph connect : ");
-        System.out.println(isConnect(readGraph("GraphConnect.txt")));
+        System.out.println("IsConnect : " + isConnect(readGraph("GraphConnect.txt")));
 
         System.out.println("\nGraph non connect : ");
-        System.out.println(isConnect(readGraph("GraphNonConnect.txt")));
+        System.out.println("IsConnect : " + isConnect(readGraph("GraphNonConnect.txt")));
 
         System.out.println("\nGraph aléatoire : ");
-        System.out.println(isConnect(generateGraph(10)));
+        System.out.println("IsConnect : " + isConnect(generateGraph(10)));
     }
 
     //Question 1
