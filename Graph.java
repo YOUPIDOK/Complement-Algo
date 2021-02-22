@@ -13,7 +13,7 @@ public class Graph {
         System.out.println("\n\n-- Read Graph --\n");
         readGraph();
 
-        System.out.println("\n\n-- Is connect --");
+        System.out.println("\n\n-- Is connect --\n");
         int[][] graphConnect = {{0,2,0,0,0,0},
                                 {0,0,5,0,0,0},
                                 {0,0,0,7,2,0},
@@ -94,7 +94,7 @@ public class Graph {
                 
             }
         }
-        
+
         if(box.size() == graph.length){
             return true;
         }
