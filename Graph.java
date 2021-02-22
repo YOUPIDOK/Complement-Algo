@@ -1,53 +1,40 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.Math;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.Scanner;
 
 public class Graph {
-    static Scanner file = new Scanner(System.in);
-    public static void main(String[] args){
-        
-        System.out.println("-- Generate Graph --\n"); 
-        printGraph(generateGraph(4));
-
-        System.out.println("\n\n-- Read Graph --\n");
-        readGraph();
-
-        System.out.println("\n\n-- Is connect --\n");
-        int[][] graphConnect = {{0,2,0,0,0,0},
-                                {0,0,5,0,0,0},
-                                {0,0,0,7,2,0},
-                                {0,0,0,0,0,0},
-                                {0,0,0,0,0,6},
-                                {0,0,0,0,0,0}};
+    public static void main(String[] args) throws IOException{
         System.out.println("Graph connect : ");
-        System.out.println(isConnect(graphConnect));
+        System.out.println(isConnect(readGraph("GraphConnect.txt")));
 
-        int[][] graphNonConnect = {{0,2,3,0,0,0},
-                                   {0,0,5,3,0,0},
-                                   {0,0,0,7,0,0},
-                                   {0,0,0,0,0,0},
-                                   {0,0,0,0,0,6},
-                                   {0,0,0,0,0,0}};
         System.out.println("\nGraph non connect : ");
-        System.out.println(isConnect(graphNonConnect));
+        System.out.println(isConnect(readGraph("GraphNonConnect.txt")));
+
+        System.out.println("\nGraph aléatoire : ");
+        System.out.println(isConnect(generateGraph(10)));
     }
 
     //Question 1
-    public static void readGraph() {
-        int numLigne = 0;
-        String ligne[] = file.nextLine().split(",");
-        int graph [][] = new int[ligne.length][ligne.length];
+    public static int[][] readGraph(String fileName) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = br.readLine();
+        int size = line.split(",").length;
+        int graph [][] = new int[size][size];
+        int i=0;
 
-        while(file.hasNextLine()){
-            for(int numColonne = 0;numColonne < ligne.length;numColonne++){
-                graph[numLigne][numColonne] = Integer.parseInt(ligne[numColonne]);
+        while(line != null){
+            String[] tab = line.split(",");
+            for(int j=0; j<size; j++){
+                graph[i][j] = Integer.parseInt(tab[j]);
             }
-            numLigne++;
-            ligne = file.nextLine().split(",");
+            i++;
+            line = br.readLine();
         }
 
-        printGraph(graph);
+        br.close();
+        return graph;
     }
 
     public static int[][] generateGraph(int size) {
@@ -55,8 +42,10 @@ public class Graph {
 
         for(int i=0; i<size; i++){
             for(int j=size-1; j>i; j--){
-                int value = (int) (Math.random()*9);
-                graph[i][j] = value;
+                if(Math.random() > 0.5){
+                    int value = (int) (Math.random()*9);
+                    graph[i][j] = value;
+                }
             }    
         }
 
@@ -101,13 +90,10 @@ public class Graph {
         return false;
     }
 
-
-
     //Question 3
     public static int[][] dijkstra(int[][] graph){
         int[][] distance = new int[graph.length][graph.length];
         
         return distance;
     }
-
 }
