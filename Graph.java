@@ -39,15 +39,9 @@ public class Graph {
 
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
-                if(j<size){
-                    int value = (int) (Math.random()*9);
-                    if(value != 0 && i < j){
-                        graph[i][j] = value;
-                    }else{
-                        graph[i][j] = 0;
-                    }
-                } else {
-                    graph[i][j] = 0;
+                int value = (int) (Math.random()*9);
+                if(j<size && value != 0 && i < j){
+                    graph[i][j] = value;
                 }
             }    
         }
