@@ -10,14 +10,14 @@ public class Graph {
         System.out.println("-- Generate Graph --"); 
         printGraph(generateGraph(4));
         System.out.println("\n -- Read Graph --");
-        readGraph();
-        int[][] graph = {{0,0,0,82,0,0},
-                        {0,0,59,87,0,0},
-                        {0,59,0,57,0,0},
-                        {82,87,0,0,0,0},
-                        {0,0,0,0,0,68},
-                        {0,0,0,0,68,0}};
-        isConnect(graph);
+        // readGraph();
+        // int[][] graph = {{0,0,0,82,0,0},
+        //                 {0,0,59,87,0,0},
+        //                 {0,59,0,57,0,0},
+        //                 {82,87,0,0,0,0},
+        //                 {0,0,0,0,0,68},
+        //                 {0,0,0,0,68,0}};
+        // isConnect(graph);
     }
 
     //Question 1
@@ -34,16 +34,14 @@ public class Graph {
         }
         printGraph(graph);
     }
-    // Fonction a revoir a cause du fait qu'elle ne génère pas les même valeurs (graph[i][j] DOIT ETRE égal à graphe[j][i])
-    // De plus il y a des cases qui sont toujours à 0
     public static int[][] generateGraph(int size) {
         int[][] graph = new int[size][size];
 
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
-                if(j<size-i){
+                if(j<size){
                     int value = (int) (Math.random()*9);
-                    if(value != 0 && i != j){
+                    if(value != 0 && i < j){
                         graph[i][j] = value;
                     }else{
                         graph[i][j] = 0;
