@@ -45,6 +45,7 @@ public class Graph {
                 if(Math.random() > 0.5){
                     int value = (int) (Math.random()*9);
                     graph[i][j] = value;
+                    graph[j][i] = value;
                 }
             }    
         }
@@ -83,7 +84,6 @@ public class Graph {
                 
             }
         }
-
         if(box.size() == graph.length){
             return true;
         }
