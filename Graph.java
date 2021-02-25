@@ -1,44 +1,75 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.Math;
 import java.util.*;
 
 public class Graph {
     public static void main(String[] args) throws IOException {
-        System.out.println("\n*********QUESTION 1************");
-        System.out.println("************Graph connect : ************");
-        printGraph(readGraph("GraphConnect.txt"));
-        System.out.println("IsConnect : " + isConnect(readGraph("GraphConnect.txt")));
+        BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
+        while (true){
+            System.out.println("Saisir le numéro de la question à afficher ( de 1 à 6 ), saisir un autre chiffre pour quitter.");
+            System.out.print("Numéro de la question : ");
+            String txt = userIn.readLine();
+            System.out.println();
+            int number = 7;
+            if(isInt(txt)){
+                number = Integer.parseInt(txt);
+            }
+            if(number < 1 || number > 6){
+                System.out.println("Au revoir :)");
+                System.exit(0);
+            }else if(number == 1){
+                System.out.println("********* QUESTION 1 *********");
+                System.out.println("********* Graph aléatoire *********");
+                int[][] graphAleatoire = generateGraph(5);
+                printGraph(graphAleatoire);
+            }else if(number == 2){
+                System.out.println("\n********* QUESTION 2 *********");
+                System.out.println("********* Graph connect *********");
+                printGraph(readGraph("GraphConnect.txt"));
+                System.out.println("IsConnect : " + isConnect(readGraph("GraphConnect.txt")));
+                System.out.println("\n********* Graph non connect *********");
+                printGraph(readGraph("GraphNonConnect.txt"));
+                System.out.println("IsConnect : " + isConnect(readGraph("GraphNonConnect.txt")));
+            }else if(number == 3){
+                System.out.println("\n********* QUESTION 3 *********");
+                System.out.println("********* Djikstra pour tous les points : *********");
+                System.out.println("Graph de départ : ");
+                printGraph(readGraph("GraphConnexe2.txt"));
+                System.out.println("\nPlus court chemin entre tous les points :");
+                printGraph(getDistanceMinForAllPoints(readGraph("GraphConnexe2.txt")));
+            }else if(number == 4){
+                System.out.println("\n********* QUESTION 4 *********");
+                System.out.println("********* Graph complet *********");
+                printGraph(readGraph("GraphComplet.txt"));
+                System.out.println("Is complet : " + isComplet(readGraph("GraphComplet.txt")));
 
-        System.out.println("\n************Graph non connect : ************");
-        readGraph("GraphNonConnect.txt");
-        System.out.println("IsConnect : " + isConnect(readGraph("GraphNonConnect.txt")));
+                System.out.println("\n********* Graph non complet *********");
+                int[][] graphNonComplet = generateGraph(5);
+                printGraph(graphNonComplet);
+                System.out.println("Is complet : " + isComplet(graphNonComplet));
 
-        System.out.println("\n*********QUESTION 2************");
-        System.out.println("\n************Graph aléatoire : ************");
-        System.out.println("IsConnect : " + isConnect(generateGraph(10)));
+                System.out.println("\n********* Cycle *********");
+                System.out.println("TRAJET TOTAL : "+cycle(readGraph("GraphComplet.txt"), 0));
+            }else if(number == 5){
 
-        System.out.println("\n*********QUESTION 3************");
-        System.out.println("\n************Djikstra pour tous les points : ************");
-        System.out.println("Graph de départ : ");
-        System.out.println("IsConnect : " + isConnect(readGraph("GraphConnexe2.txt")));
-        System.out.println("Plus court chemin entre tous les points :");
-        printGraph(getDistanceMinForAllPoints(readGraph("GraphConnexe2.txt")));
+            }else if(number == 6){
 
-        System.out.println("\n*********QUESTION 4************");
-        System.out.println("\n*********Graph complet : ************");
-        printGraph(readGraph("GraphComplet.txt"));
-        System.out.println("Is complet : " + isComplet(readGraph("GraphComplet.txt")));
+            }
+            System.out.println("\n");
+        }
+    }
 
-        System.out.println("\n*********Graph non complet : ************");
-        int[][] graphNonComplet = generateGraph(5);
-        printGraph(graphNonComplet);
-        System.out.println("Is complet : " + isComplet(graphNonComplet));
+    public static boolean isInt(String chaine) {
+        try {
+            Integer.parseInt(chaine);
+        } catch (NumberFormatException e){
+            return false;
+        }
 
-        System.out.println("\n*********Cycle : ************");
-        System.out.println("IsConnect : " + isConnect(readGraph("Graph2.txt")));
-        System.out.println(cycle(readGraph("Graph2.txt"), 0));
+        return true;
     }
 
     // Question 1
@@ -142,6 +173,7 @@ public class Graph {
                 }
 
             }
+
             valsNoeudsReperes.remove(noeudsReperes.indexOf(sommetRef));
             noeudsReperes.remove(noeudsReperes.indexOf(sommetRef));
             noeudsMarques.add(sommetRef);
@@ -167,29 +199,31 @@ public class Graph {
     // Question 4
     // Dans l'algorithme ci-dessous, dès qu'on voit une arête on l'emprunte
     public static int cycle(int[][] graph,int depart){
-        HashSet<Integer> noeudsMarques = new HashSet<>();
-        ArrayList<Integer> noeudsReperes = new ArrayList<Integer>();
+        ArrayList<Integer> noeudsMarques = new ArrayList<>();
+        ArrayList<Integer> distances = new ArrayList<Integer>();
+        ArrayList<Integer> sommetsDistances  = new ArrayList<Integer>();
         String[] a = {"A","B","C","D","E","F","G","H","I","J"};
         int dist = 0;
-        noeudsReperes.add(depart);
-
-        while (noeudsMarques.size() != graph.length - 1) {
-            int sommetRef = noeudsReperes.get(0);
+        noeudsMarques.add(depart);
+        int sommetRef = depart;
+        System.out.println("DISTANCE : "+dist+","+a[sommetRef]);
+        while (noeudsMarques.size() != graph.length ) {
             for (int sommetDest = 0; sommetDest < graph[sommetRef].length; sommetDest++) {
                 if (graph[sommetRef][sommetDest] != 0 && !noeudsMarques.contains(sommetDest)) {
-                    if(!noeudsReperes.contains(sommetDest)){
-                        noeudsReperes.add(sommetDest);
-                        dist+=graph[sommetRef][sommetDest];
-                        System.out.println("ON PEUT ALLER EN "+a[sommetDest]+"(+"+graph[sommetRef][sommetDest]+")"+","+dist);
-                        break;
-                    }
-
+                    distances.add(graph[sommetRef][sommetDest]);
+                    sommetsDistances.add(sommetDest);
                 }
             }
-            noeudsReperes.remove(noeudsReperes.indexOf(sommetRef));
+            int distChoisie = Collections.min(distances);
+            dist += distChoisie;
             noeudsMarques.add(sommetRef);
+            sommetRef = sommetsDistances.get(distances.indexOf(distChoisie));
+            distances.clear();
+            sommetsDistances.clear();
+            System.out.println("DISTANCE : "+dist+","+a[sommetRef]);
         }
-        return -1;
+        // Ici l'algorithme va retourner 230 alors que le minimum vaut 190
+        return dist + graph[sommetRef][depart];
     }
     public static boolean isComplet(int[][] graph){
         if(isConnect(graph)){
