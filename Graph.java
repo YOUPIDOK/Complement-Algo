@@ -7,7 +7,6 @@ import java.util.*;
 
 public class Graph {
     public static void main(String[] args) throws IOException {
-        System.out.println(getPermutation("abc"));
         BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             System.out.println("Saisir le numéro de la question à afficher ( de 1 à 6 ), saisir un autre chiffre pour quitter.");
@@ -55,9 +54,9 @@ public class Graph {
                 System.out.println("TRAJET TOTAL : " + cycle(readGraph("GraphComplet.txt"), 0));
             } else if (number == 5) {
                 System.out.println("\n********* QUESTION 5 *********");
-                System.out.println("********* Cycle optimal *********");
+                System.out.println("********* Cycle optimal *********\n");
                 printGraph(readGraph("GraphComplet.txt"));
-                cycle2(readGraph("GraphComplet.txt"),1);
+                cycle2(readGraph("GraphComplet.txt"),0);
             } else if (number == 6) {
 
             }
@@ -99,7 +98,7 @@ public class Graph {
     }
 
     public static int[][] generateGraph(int size) {
-        // Méthode pour générer un graphe aléatoire connexe
+        // Méthode pour générer un graphe aléatoir
         int[][] graph = new int[size][size];// On crée un tabeau à deux dimensions de taille size
 
         for (int i = 0; i < size; i++) {
@@ -265,65 +264,101 @@ public class Graph {
     }
 
     // Question 5
-    public static int cycle2(int[][] graph,int depart) {
+    public static ArrayList<Integer> cycle2(int[][] graph,int depart) {
         // Méthode pour trouver un cycle de distance optimal
-        int distance = 0;
-        int graphSize = graph.length;
-        ArrayList<Integer> noeuds = new ArrayList<Integer>();
+        if(!isComplet(graph) && graph.length > 1){
+            // Si le graphe n'est pas complet on n'éxecute pas l'algorithme
+            return null;
+        }
+        int distance ; // Pour stocker la distance calaculé
+        int graphSize = graph.length; // Taille du graph
 
-        //Trouver toutes les solutions de cycle par combinaison
-        //Comparer leurs distance et renvoyer la meilleur solution
-        String txtForCombinaison = "";
+        ArrayList<ArrayList<Integer>> arrangement = new ArrayList<>(); // Pour les stocker toutes les combinaisons possible
+        ArrayList<Integer> nodeList; // Pour stocker les chemeins de noeud
+
+        ArrayList<Integer> solution = new ArrayList<>(); // Pour stocker la solution
+        int distanceMax = 0; // Pour stocker la distane max
+        for (int i=0; i<graph.length; i++){ // Creaion d'une valeur max supérieur a celle maximum
+            for(int j=0; j<graph.length; j++){
+                distanceMax += graph[i][j]; // Addition des distances
+            }
+        }
+        
+        String txtForCombinaison = ""; // Creation du parametre pour getArrangement()
         for (int i = 0; i < graphSize; i++) {
             txtForCombinaison += String.valueOf(i);
         }
-        ArrayList<String> listOfString = getPermutation(txtForCombinaison);
-        System.out.println(listOfString);
-        return -1;
+        ArrayList<String> listOfString = getArrangement(txtForCombinaison); // Tous les arrangement possible parmis le graph
 
-    }
-
-    public static void combinaison(int size, int actual){
-        // Etape 1 : On détermine les différentes combinaisons de sommets
-        // Etape 2 : On calcule les distances associées
-        // Etape 3 : Renvoyer la meilleure solution
-
-    }
-
-    public static ArrayList<String> getPermutation(String str)
-    {
-
-        // If string is empty
-        if (str.length() == 0) {
-
-            // Return an empty arraylist
-            ArrayList<String> empty = new ArrayList<>();
-            empty.add("");
-            return empty;
+        for (String txt : listOfString) { // Convertion d'un Arraylist<String> en Arraylist<Arraylist<Integer>>
+            nodeList = new ArrayList<>(); // Creation d'une nouvelle liste vide
+            for (int i=0; i<txt.length(); i++){ // Ajout de chaqque lettre de la string en int dans l'araylist
+                nodeList.add(Integer.parseInt(String.valueOf(txt.charAt(i))));
+            }
+            if(nodeList.get(0) == depart){ // Ajout de tt les list de noeud créé dans arrangement
+                arrangement.add(nodeList);
+            }
         }
 
-        // Take first character of str
-        char ch = str.charAt(0);
+        for (ArrayList<Integer> nodePath : arrangement){ // Pour chaque liste de noeud
+            distance = 0; // Remise a 0 de distance
+            for(int i=1; i<graph.length; i++){ // Ajout de la distance entre chaque noeud a distance
+                distance += graph[nodePath.get(i-1)][nodePath.get(i)];
+//                System.out.print("| " + (i-1) + " => " + i + " : " + graph[nodePath.get(i-1)][nodePath.get(i)]);
+            }
+            distance += graph[nodePath.get(nodePath.size()-1)][depart] ; // Ajout de la distance de retour à distance
+//            System.out.print( " == " + distance + " " + nodePath + "\n");
+            if(distance < distanceMax){ // Si le chemin est plus court
+                distanceMax = distance; // On sauvegarde la distance
+                solution = nodePath; // On sauvegarde la liste de noeud
+            }
+        }
 
-        // Take sub-string starting from the
-        // second character
-        String subStr = str.substring(1);
+        if(!solution.isEmpty()){ // Si la liste n'est pas vide, affichage du resultat
+            System.out.println("\nLa solution est " + solution + ", parcours de longueur : " + distanceMax);
+        }
+        return solution;
 
-        // Recurvise call
-        ArrayList<String> prevResult = getPermutation(subStr);
+    }
+    
 
-        // Store the generated permutations
-        // into the resultant arraylist
+    public static ArrayList<String> getArrangement(String str)
+    {
+        if (str.length() == 0) { //Si str est de taille 0
+            ArrayList<String> empty = new ArrayList<>();
+            empty.add("");
+            return empty; // Retourne une liste vide
+        }
+
+        char ch = str.charAt(0); // Prend le premier caractere de str
+        String subStr = str.substring(1); // Prend la sous chaine a partir du second caractere
+
+        ArrayList<String> prevResult = getArrangement(subStr); // Recursif
+
+        // Stocker les permutations générées dans res
         ArrayList<String> Res = new ArrayList<>();
-
         for (String val : prevResult) {
             for (int i = 0; i <= val.length(); i++) {
                 Res.add(val.substring(0, i) + ch + val.substring(i));
             }
         }
-
-        // Return the resultant arraylist
-        return Res;
+        return Res;  // Returne res
     }
+
+    public static int[][] generateGraphComplet(int size) {
+        // Méthode pour générer un graphe aléatoire complet
+        int[][] graph = new int[size][size];// On crée un tabeau à deux dimensions de taille size
+
+        for (int i = 0; i < size; i++) {
+            for (int j = size - 1; j > i; j--) {
+                int value = (int) (Math.random() * 9) +1 ;// On tire une valeur au sort entre 1 et 10 non compris
+                graph[i][j] = value;
+                graph[j][i] = value;
+            }
+        }
+
+        return graph;// On retourne le tableau
+    }
+
 
 }
