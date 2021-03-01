@@ -199,14 +199,18 @@ public class Graph {
     // Question 4
     // Dans l'algorithme ci-dessous, dès qu'on voit une arête on l'emprunte
     public static int cycle(int[][] graph,int depart){
+        if(!isComplet(graph)){
+            // Si le graphe n'est pas complet on n'éxecute pas l'algorithme
+            return -1;
+        }
         ArrayList<Integer> noeudsMarques = new ArrayList<>();
         ArrayList<Integer> distances = new ArrayList<Integer>();
         ArrayList<Integer> sommetsDistances  = new ArrayList<Integer>();
-        String[] a = {"A","B","C","D","E","F","G","H","I","J"};
+        String[] a = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R"};
         int dist = 0;
         noeudsMarques.add(depart);
         int sommetRef = depart;
-        System.out.println("DISTANCE : "+dist+","+a[sommetRef]);
+        System.out.println("PARCOURS : "+dist+","+a[sommetRef]);
         while (noeudsMarques.size() != graph.length ) {
             for (int sommetDest = 0; sommetDest < graph[sommetRef].length; sommetDest++) {
                 if (graph[sommetRef][sommetDest] != 0 && !noeudsMarques.contains(sommetDest)) {
@@ -220,11 +224,11 @@ public class Graph {
             sommetRef = sommetsDistances.get(distances.indexOf(distChoisie));
             distances.clear();
             sommetsDistances.clear();
-            System.out.println("DISTANCE : "+dist+","+a[sommetRef]);
+            System.out.println("PARCOURS : "+dist+","+a[sommetRef]);
         }
-        // Ici l'algorithme va retourner 230 alors que le minimum vaut 190
         return dist + graph[sommetRef][depart];
     }
+
     public static boolean isComplet(int[][] graph){
         if(isConnect(graph)){
             for(int i = 0;i<graph.length;i++){
@@ -238,5 +242,10 @@ public class Graph {
             return false;
         }
         return true;
+    }
+
+    // Question 5
+    public static int cycle2(int[][] graph,int depart){
+            return -1;
     }
 }
