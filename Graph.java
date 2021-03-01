@@ -58,7 +58,9 @@ public class Graph {
                 printGraph(readGraph("GraphComplet.txt"));
                 cycle2(readGraph("GraphComplet.txt"),0);
             } else if (number == 6) {
-
+                System.out.println("\n********* QUESTION 6 *********");
+                System.out.println("********* Comparaison du temps d'execution*********\n");
+                question6();
             }
             System.out.println("\n");
         }
@@ -360,5 +362,23 @@ public class Graph {
         return graph;// On retourne le tableau
     }
 
+    public static void question6(){
+        System.out.println("Test sur un graph de 15 noeuds");
+        int[][] graph = generateGraphComplet(10);
+
+        long lStartTime = System.currentTimeMillis();
+        int res = cycle(graph,0);
+        long lEndTime = System.currentTimeMillis();
+        long output = lEndTime - lStartTime;
+        System.out.println("Total : " + res);
+        System.out.println("*** Algo question 4 :" + output + " ms");
+
+        long lStartTime2 = System.currentTimeMillis();
+        cycle2(graph,0);
+        long lEndTime2 = System.currentTimeMillis();
+        long output2 = lEndTime2 - lStartTime2;
+        System.out.println("*** Algo question 5 :" + output2 + " ms");
+
+    }
 
 }
